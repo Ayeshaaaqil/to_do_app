@@ -1,0 +1,16 @@
+{
+  "name": "todo-app-tailwind",
+  "version": "1.0.0",
+  "description": "A simple todo app with Tailwind CSS",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tailwindcss -i ./src/input.css -o ./css/output.css",
+    "watch": "npx tailwindcss -i ./src/input.css -o ./css/output.css --watch"
+  },
+  "keywords": ["tailwind", "todo", "css"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}

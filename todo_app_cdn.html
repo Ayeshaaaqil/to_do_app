@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App with Tailwind CDN</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="max-w-md w-full bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-2xl font-bold text-center text-indigo-600 mb-6">My Todo App</h1>
+        
+        <div class="mb-6">
+            <div class="flex">
+                <input 
+                    type="text" 
+                    id="todoInput" 
+                    placeholder="Add a new task..." 
+                    class="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                <button 
+                    id="addBtn" 
+                    class="bg-indigo-600 text-white px-4 py-2 rounded-r-lg hover:bg-indigo-700 transition-colors"
+                >
+                    Add
+                </button>
+            </div>
+        </div>
+        
+        <ul id="todoList" class="space-y-2">
+            <!-- Todo items will be added here dynamically -->
+        </ul>
+        
+        <div class="mt-6 text-center text-gray-500 text-sm">
+            <p>Try this: If Tailwind is working, you should see colors, rounded corners, and proper spacing.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const todoInput = document.getElementById('todoInput');
+            const addBtn = document.getElementById('addBtn');
+            const todoList = document.getElementById('todoList');
+            
+            // Sample todos
+            const todos = [
+                { id: 1, text: 'Learn Tailwind CSS', completed: false },
+                { id: 2, text: 'Build a Todo App', completed: true },
+                { id: 3, text: 'Deploy to production', completed: false }
+            ];
+            
+            // Function to render todos
+            function renderTodos() {
+                todoList.innerHTML = '';
+                todos.forEach(todo => {
+                    const li = document.createElement('li');
+                    li.className = `flex items-center justify-between p-3 border rounded-lg ${todo.completed ? 'bg-green-50' : 'bg-white'}`;
+                    li.innerHTML = `
+                        <div class="flex items-center">
+                            <input 
+                                type="checkbox" 
+                                ${todo.completed ? 'checked' : ''} 
+                                class="mr-3 h-5 w-5 text-indigo-600 rounded"
+                                data-id="${todo.id}"
+                            >
+                            <span class="${todo.completed ? 'line-through text-gray-500' : 'text-gray-800'}">${todo.text}</span>
+                        </div>
+                        <button 
+                            class="delete-btn text-red-500 hover:text-red-700"
+                            data-id="${todo.id}"
+                        >
+                            Delete
+                        </button>
+                    `;
+                    todoList.appendChild(li);
+                });
+                
+                // Add event listeners to checkboxes
+                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.addEventListener('change', toggleTodo);
+                });
+                
+                // Add event listeners to delete buttons
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', deleteTodo);
+                });
+            }
+            
+            // Function to add a new todo
+            function addTodo() {
+                const text = todoInput.value.trim();
+                if (text) {
+                    const newTodo = {
+                        id: Date.now(),
+                        text: text,
+                        completed: false
+                    };
+                    todos.push(newTodo);
+                    todoInput.value = '';
+                    renderTodos();
+                }
+            }
+            
+            // Function to toggle todo completion
+            function toggleTodo(e) {
+                const id = parseInt(e.target.dataset.id);
+                const todo = todos.find(t => t.id === id);
+                if (todo) {
+                    todo.completed = e.target.checked;
+                    renderTodos();
+                }
+            }
+            
+            // Function to delete a todo
+            function deleteTodo(e) {
+                const id = parseInt(e.target.dataset.id);
+                const index = todos.findIndex(t => t.id === id);
+                if (index !== -1) {
+                    todos.splice(index, 1);
+                    renderTodos();
+                }
+            }
+            
+            // Event listeners
+            addBtn.addEventListener('click', addTodo);
+            todoInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    addTodo();
+                }
+            });
+            
+            // Initial render
+            renderTodos();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,298 @@
+/* Premium Animations and Effects for TodoPro */
+
+/* Premium Checkbox Animation */
+.premium-checkbox {
+  position: relative;
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+}
+
+.premium-checkbox input[type="checkbox"] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.premium-checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 22px;
+  width: 22px;
+  background-color: #eee;
+  border-radius: 6px;
+  border: 2px solid #cbd5e1;
+  transition: all 0.3s ease;
+}
+
+.premium-checkbox:hover .premium-checkmark {
+  background-color: #f0f0f0;
+}
+
+.premium-checkbox input:checked ~ .premium-checkmark {
+  background-color: #10b981;
+  border-color: #10b981;
+  transform: scale(1.05);
+}
+
+.premium-checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.premium-checkbox input:checked ~ .premium-checkmark:after {
+  display: block;
+}
+
+.premium-checkbox .premium-checkmark:after {
+  left: 7px;
+  top: 3px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Premium Button Styles */
+.premium-btn {
+  position: relative;
+  overflow: hidden;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.premium-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: 0.5s;
+}
+
+.premium-btn:hover::before {
+  left: 100%;
+}
+
+.premium-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.premium-btn:active {
+  transform: translateY(0);
+}
+
+/* Premium Card Hover Effect */
+.premium-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.premium-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Premium Input Field */
+.premium-input {
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  border: 2px solid #e2e8f0;
+}
+
+.premium-input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Premium Progress Bar */
+.premium-progress {
+  height: 8px;
+  border-radius: 4px;
+  background-color: #e2e8f0;
+  overflow: hidden;
+}
+
+.premium-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  border-radius: 4px;
+  transition: width 1s ease-in-out;
+  position: relative;
+}
+
+.premium-progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    -25deg,
+    rgba(255, 255, 255, 0.3) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0.3) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 30px 30px;
+  animation: progress-shine 1.5s infinite linear;
+}
+
+@keyframes progress-shine {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 30px 30px;
+  }
+}
+
+/* Premium Loading Skeleton */
+.premium-skeleton {
+  animation: skeleton-loading 1.5s infinite alternate;
+  border-radius: 8px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: #eef2ff;
+  }
+  100% {
+    background-color: #c7d2fe;
+  }
+}
+
+/* Premium Task Completion Animation */
+.task-completed {
+  animation: task-complete 0.5s ease-out forwards;
+}
+
+@keyframes task-complete {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateX(-10px) scale(0.98);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-20px) scale(0.9);
+    height: 0;
+    padding: 0;
+    margin: 0;
+    border: none;
+    overflow: hidden;
+  }
+}
+
+/* Premium Floating Action Button */
+.premium-fab {
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.premium-fab:hover {
+  transform: scale(1.1) translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.premium-fab:active {
+  transform: scale(0.95);
+}
+
+/* Premium Notification Animation */
+.premium-notification {
+  animation: notification-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes notification-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Premium Modal Animation */
+.premium-modal {
+  animation: modal-appear 0.3s ease-out;
+}
+
+@keyframes modal-appear {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Premium Stats Counter Animation */
+@keyframes counter-increment {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.counter-digit {
+  display: inline-block;
+  animation: counter-increment 0.5s ease-out;
+}
+
+/* Premium Hover Effects */
+.hover-lift {
+  transition: all 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.hover-scale {
+  transition: all 0.3s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.03);
+}
+
+/* Premium Focus Ring */
+.focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+}
+
+/* Premium Staggered Animation */
+.stagger-children > * {
+  animation-delay: calc(var(--index) * 0.1s);
+}

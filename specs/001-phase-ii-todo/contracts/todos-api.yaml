@@ -1,0 +1,203 @@
+# API Contracts: Phase II Todo Web Application
+
+## Authentication Endpoints
+
+### POST /api/auth/signup
+**Purpose**: Create a new user account
+
+**Request**:
+- Content-Type: `application/json`
+- Body:
+  ```json
+  {
+    "email": "user@example.com",
+    "password": "securePassword123",
+    "name": "John Doe"
+  }
+  ```
+
+**Response**:
+- 201 Created: User successfully created and authenticated
+  ```json
+  {
+    "user": {
+      "id": "uuid-string",
+      "email": "user@example.com",
+      "name": "John Doe"
+    },
+    "token": "auth-token-string"
+  }
+  ```
+- 400 Bad Request: Invalid input data
+- 409 Conflict: User with email already exists
+
+### POST /api/auth/signin
+**Purpose**: Authenticate an existing user
+
+**Request**:
+- Content-Type: `application/json`
+- Body:
+  ```json
+  {
+    "email": "user@example.com",
+    "password": "securePassword123"
+  }
+  ```
+
+**Response**:
+- 200 OK: User successfully authenticated
+  ```json
+  {
+    "user": {
+      "id": "uuid-string",
+      "email": "user@example.com",
+      "name": "John Doe"
+    },
+    "token": "auth-token-string"
+  }
+  ```
+- 400 Bad Request: Invalid input data
+- 401 Unauthorized: Invalid credentials
+
+### POST /api/auth/signout
+**Purpose**: Sign out the current user
+
+**Request**:
+- Headers: `Authorization: Bearer {token}`
+- Body: (empty)
+
+**Response**:
+- 200 OK: User successfully signed out
+- 401 Unauthorized: Invalid or expired token
+
+## Todo Management Endpoints
+
+### GET /api/todos
+**Purpose**: Retrieve all todos for the authenticated user
+
+**Request**:
+- Headers: `Authorization: Bearer {token}`
+
+**Response**:
+- 200 OK: Successfully retrieved todos
+  ```json
+  {
+    "todos": [
+      {
+        "id": "uuid-string",
+        "title": "Todo title",
+        "description": "Todo description",
+        "is_completed": false,
+        "user_id": "user-uuid",
+        "created_at": "2023-01-01T00:00:00Z",
+        "updated_at": "2023-01-01T00:00:00Z"
+      }
+    ]
+  }
+  ```
+- 401 Unauthorized: Invalid or expired token
+
+### POST /api/todos
+**Purpose**: Create a new todo for the authenticated user
+
+**Request**:
+- Headers: `Authorization: Bearer {token}`
+- Content-Type: `application/json`
+- Body:
+  ```json
+  {
+    "title": "New todo title",
+    "description": "New todo description"
+  }
+  ```
+
+**Response**:
+- 201 Created: Todo successfully created
+  ```json
+  {
+    "id": "uuid-string",
+    "title": "New todo title",
+    "description": "New todo description",
+    "is_completed": false,
+    "user_id": "user-uuid",
+    "created_at": "2023-01-01T00:00:00Z",
+    "updated_at": "2023-01-01T00:00:00Z"
+  }
+  ```
+- 400 Bad Request: Invalid input data
+- 401 Unauthorized: Invalid or expired token
+
+### PUT /api/todos/{id}
+**Purpose**: Update an existing todo for the authenticated user
+
+**Request**:
+- Headers: `Authorization: Bearer {token}`
+- Content-Type: `application/json`
+- Path parameter: `id` (todo ID)
+- Body:
+  ```json
+  {
+    "title": "Updated todo title",
+    "description": "Updated todo description"
+  }
+  ```
+
+**Response**:
+- 200 OK: Todo successfully updated
+  ```json
+  {
+    "id": "uuid-string",
+    "title": "Updated todo title",
+    "description": "Updated todo description",
+    "is_completed": false,
+    "user_id": "user-uuid",
+    "created_at": "2023-01-01T00:00:00Z",
+    "updated_at": "2023-01-02T00:00:00Z"
+  }
+  ```
+- 400 Bad Request: Invalid input data
+- 401 Unauthorized: Invalid or expired token
+- 404 Not Found: Todo doesn't exist or doesn't belong to user
+
+### PATCH /api/todos/{id}/complete
+**Purpose**: Mark a todo as complete/incomplete
+
+**Request**:
+- Headers: `Authorization: Bearer {token}`
+- Content-Type: `application/json`
+- Path parameter: `id` (todo ID)
+- Body:
+  ```json
+  {
+    "is_completed": true
+  }
+  ```
+
+**Response**:
+- 200 OK: Todo status successfully updated
+  ```json
+  {
+    "id": "uuid-string",
+    "title": "Todo title",
+    "description": "Todo description",
+    "is_completed": true,
+    "user_id": "user-uuid",
+    "created_at": "2023-01-01T00:00:00Z",
+    "updated_at": "2023-01-02T00:00:00Z"
+  }
+  ```
+- 400 Bad Request: Invalid input data
+- 401 Unauthorized: Invalid or expired token
+- 404 Not Found: Todo doesn't exist or doesn't belong to user
+
+### DELETE /api/todos/{id}
+**Purpose**: Delete a todo for the authenticated user
+
+**Request**:
+- Headers: `Authorization: Bearer {token}`
+- Path parameter: `id` (todo ID)
+
+**Response**:
+- 204 No Content: Todo successfully deleted
+- 401 Unauthorized: Invalid or expired token
+- 404 Not Found: Todo doesn't exist or doesn't belong to user

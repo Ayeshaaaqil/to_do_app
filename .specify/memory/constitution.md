@@ -1,55 +1,84 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!-- SYNC IMPACT REPORT
+Version change: 1.0.0 → 2.0.0
+Modified principles: All principles updated to reflect Phase II requirements
+Added sections: Technology Matrix section
+Removed sections: None
+Templates requiring updates:
+- ✅ .specify/templates/plan-template.md - updated to reflect new tech stack
+- ✅ .specify/templates/spec-template.md - updated to reflect new tech stack
+- ✅ .specify/templates/tasks-template.md - updated to reflect new tech stack
+Follow-up TODOs: None
+-->
+
+# The Evolution of Todo - Project Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Phase-Gated Development
+All features and technologies must align with the current development phase. Phase I (in-memory console app) → Phase II (full-stack web app) → Phase III+ (advanced cloud/agents/AI). No technology or feature from a later phase may be introduced early without explicit approval and clear justification.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Full-Stack Web Architecture
+The application follows a modern full-stack architecture with a Python REST API backend, Neon Serverless PostgreSQL database, SQLModel for data management, and a Next.js frontend with React and TypeScript. All components must be designed to work cohesively within this architecture.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Test-First (NON-NEGOTIABLE)
+TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced. All new features must have comprehensive unit, integration, and end-to-end tests before merging.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Integration Testing
+Focus areas requiring integration tests: API contract tests, Database interactions, Authentication flows, Frontend-backend communication, Shared schemas between services.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Technology Compliance
+All implementations must strictly adhere to the approved technology matrix. No unauthorized frameworks, libraries, or services may be introduced without explicit constitutional amendment. Technology choices must align with the current phase of development.
 
-### [PRINCIPLE_6_NAME]
+### VI. Authentication-First Design
+Authentication and security must be considered from the initial design phase. Better Auth must be implemented for all user-facing features. All user data must be properly secured and access-controlled from the beginning of Phase II development.
 
 
-[PRINCIPLE__DESCRIPTION]
+## Technology Matrix
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### Phase I (Completed)
+- Architecture: In-memory console application only
+- Language: Python
+- Interface: Command-line interface (CLI)
+- Persistence: In-memory storage only
+- Authentication: Not allowed
+- External Dependencies: Python standard library (with optional rich/typer for CLI enhancement)
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### Phase II (Current)
+- Backend: Python REST API
+- Database: Neon Serverless PostgreSQL
+- ORM/Data layer: SQLModel or equivalent
+- Frontend: Next.js (React, TypeScript)
+- Authentication: Better Auth (signup/signin)
+- Architecture: Full-stack web application
+- Authentication: Allowed starting Phase II
+- Web frontend: Allowed starting Phase II
+- Neon PostgreSQL: Allowed starting Phase II
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### Phase III and Later
+- Advanced cloud infrastructure, agents, AI, orchestration
+- AI and agent frameworks: Only allowed starting Phase III
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Development Workflow
+
+### Feature Implementation Process
+1. **Specification**: Every feature starts with a written specification in the specs/ folder
+2. **Planning**: Architecture and technical approach must be documented in plan.md
+3. **Task Breakdown**: Implementation tasks must be detailed in tasks.md
+4. **Implementation**: Code following the approved specifications
+5. **Testing**: All features must pass unit, integration, and acceptance tests
+6. **Review**: Code review must verify constitutional compliance
+
+### Code Quality Standards
+- Clean, readable code over complex solutions
+- Follow language-specific style guides (PEP 8 for Python, etc.)
+- Comprehensive documentation for all modules, classes, and functions
+- Proper error handling and graceful degradation
+- Modular design with clear separation of concerns
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+The constitution supersedes all other development practices. All pull requests and code reviews must verify constitutional compliance. Any deviation from these principles requires a formal constitutional amendment with proper documentation and approval.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+Technology choices must be justified and aligned with the current development phase. Complexity must be justified with clear value propositions.
+
+**Version**: 2.0.0 | **Ratified**: 2025-01-01 | **Last Amended**: 2025-12-31
