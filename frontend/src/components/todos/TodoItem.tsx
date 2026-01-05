@@ -145,7 +145,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onUpdate, onToggleComplete, o
         <div>
           <div className="task-header">
             <div className="task-checkbox">
-              <input
+              <i
                 type="checkbox"
                 id={`todo-${todo.id}`}
                 checked={todo.is_completed}

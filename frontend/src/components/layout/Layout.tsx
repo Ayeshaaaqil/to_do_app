@@ -209,7 +209,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="bg-gray-800 text-white py-8 mt-12 dark:bg-gray-850"
+        className="bg-gray-800 text-white py-8 mt-12 dark:bg-gray-900"
       >
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
@@ -222,6 +222,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               <p className="text-gray-500 text-sm mt-1">Designed with Ayesha Aaqil❤️ </p>
             </div>
           </div>
+        </div>
       </motion.footer>
     </div>
   );
