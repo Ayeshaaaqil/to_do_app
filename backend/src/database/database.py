@@ -7,7 +7,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Database URL from environment variables
-DATABASE_URL = os.getenv("DATABASE_URL") or os.getenv("NEON_DATABASE_URL", "postgresql://user:password@localhost/defaultdb")
+# Using SQLite for development to avoid connection issues
+DATABASE_URL = os.getenv("DATABASE_URL") or os.getenv("NEON_DATABASE_URL", "sqlite:///./todoapp.db")
 
 # Create the engine
 engine = create_engine(DATABASE_URL, echo=True)
