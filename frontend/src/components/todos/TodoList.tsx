@@ -30,7 +30,7 @@ const TodoList: React.FC = () => {
 
   useEffect(() => {
     // Calculate completed tasks
-    const completed = todos.filter(todo => todo.is_completed).length;
+    const completed = Array.isArray(todos) ? todos.filter(todo => todo.is_completed).length : 0;
     setCompletedCount(completed);
   }, [todos]);
 
@@ -83,7 +83,7 @@ const TodoList: React.FC = () => {
 
     try {
       const newTodo = await todoAPI.createTodo(title, description);
-      setTodos(prevTodos => [...prevTodos, newTodo]);
+      setTodos(prevTodos => Array.isArray(prevTodos) ? [...prevTodos, newTodo] : [newTodo]);
       setShowForm(false);
     } catch (err: any) {
       // If authentication error, redirect to sign in
@@ -116,7 +116,7 @@ const TodoList: React.FC = () => {
 
     try {
       const updatedTodo = await todoAPI.updateTodo(id, updates);
-      setTodos(prevTodos => prevTodos.map(todo => todo.id === id ? updatedTodo : todo));
+      setTodos(prevTodos => Array.isArray(prevTodos) ? prevTodos.map(todo => todo.id === id ? updatedTodo : todo) : []);
     } catch (err: any) {
       // If authentication error, redirect to sign in
       if (err.message &&
@@ -148,7 +148,7 @@ const TodoList: React.FC = () => {
 
     try {
       const updatedTodo = await todoAPI.toggleTodoComplete(id, isCompleted);
-      setTodos(prevTodos => prevTodos.map(todo => todo.id === id ? updatedTodo : todo));
+      setTodos(prevTodos => Array.isArray(prevTodos) ? prevTodos.map(todo => todo.id === id ? updatedTodo : todo) : []);
     } catch (err: any) {
       // If authentication error, redirect to sign in
       if (err.message &&
@@ -180,7 +180,7 @@ const TodoList: React.FC = () => {
 
     try {
       await todoAPI.deleteTodo(id);
-      setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+      setTodos(prevTodos => Array.isArray(prevTodos) ? prevTodos.filter(todo => todo.id !== id) : []);
     } catch (err: any) {
       // If authentication error, redirect to sign in
       if (err.message &&
@@ -297,7 +297,7 @@ const TodoList: React.FC = () => {
       <div className="relative">
         <AnimatePresence>
           <ul className="task-list">
-            {todos.map((todo, index) => (
+            {Array.isArray(todos) && todos.map((todo, index) => (
               <motion.div
                 key={todo.id}
                 initial={{ opacity: 0, y: 20, scale: 0.95 }}

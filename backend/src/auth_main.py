@@ -77,7 +77,7 @@ def signup(user_create: UserCreate):
             status_code=status.HTTP_409_CONFLICT,
             detail="User with this email already exists"
         )
-
+    
     # Create new user (in real app, you'd hash the password)
     user_id = str(uuid.uuid4())
     user_data = {
@@ -87,13 +87,13 @@ def signup(user_create: UserCreate):
         "hashed_password": user_create.password  # In real app, use bcrypt.hashpw()
     }
     mock_users_db[user_create.email] = user_data
-
+    
     # Create access token
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"sub": user_id}, expires_delta=access_token_expires
     )
-
+    
     return {
         "user": UserResponse(
             id=user_data["id"],
@@ -115,13 +115,13 @@ def signin(user_data: SigninRequest):
             detail="Invalid credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
-
+    
     # Create access token
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"sub": user["id"]}, expires_delta=access_token_expires
     )
-
+    
     return {
         "user": UserResponse(
             id=user["id"],
@@ -140,23 +140,11 @@ def signout():
 # Mock todos endpoints
 @app.get("/api/todos")
 def get_todos():
-    return []
+    return {"todos": [], "message": "Connected to API successfully"}
 
 @app.post("/api/todos")
 def create_todo():
-    return {"id": str(uuid.uuid4()), "title": "New Todo", "description": "", "is_completed": False, "created_at": datetime.now(timezone.utc), "updated_at": datetime.now(timezone.utc)}
-
-@app.put("/api/todos/{id}")
-def update_todo(id: str):
-    return {"id": id, "title": "Updated Todo", "description": "Updated description", "is_completed": False, "created_at": datetime.now(timezone.utc), "updated_at": datetime.now(timezone.utc)}
-
-@app.patch("/api/todos/{id}/complete")
-def toggle_todo_complete(id: str):
-    return {"id": id, "title": "Updated Todo", "description": "Updated description", "is_completed": True, "created_at": datetime.now(timezone.utc), "updated_at": datetime.now(timezone.utc)}
-
-@app.delete("/api/todos/{id}")
-def delete_todo(id: str):
-    return {"message": "Todo deleted successfully"}
+    return {"message": "Todo created successfully"}
 
 if __name__ == "__main__":
     import uvicorn
