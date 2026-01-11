@@ -4,8 +4,9 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, Sun, Menu, X } from 'lucide-react';
+import { Moon, Sun, Menu, X, MessageCircle } from 'lucide-react';
 import { isAuthenticated, clearAuth } from '../../services/auth';
+import FloatingChatWidget from '../Chat/FloatingChatWidget';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const router = useRouter();
@@ -77,6 +78,11 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                         My Tasks
                       </Link>
                     </motion.div>
+                    <motion.div whileHover={{ y: -2 }}>
+                      <Link href="/chat" className="hover:underline font-medium transition-all duration-300 hover:text-indigo-200">
+                        AI Assistant
+                      </Link>
+                    </motion.div>
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
@@ -102,6 +108,13 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 ) : (
                   // Show loading state while checking auth
                   <div className="text-gray-300">Loading...</div>
+                )}
+                {authChecked && isAuth && (
+                  <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                    <Link href="/chat" className="p-2 rounded-full hover:bg-indigo-700 transition-colors theme-toggle" aria-label="Open AI Assistant">
+                      <MessageCircle size={20} />
+                    </Link>
+                  </motion.div>
                 )}
                 <motion.button
                   whileHover={{ scale: 1.1 }}
@@ -157,6 +170,13 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                         >
                           My Tasks
                         </Link>
+                        <Link
+                          href="/chat"
+                          className="hover:underline font-medium py-2 px-4 rounded hover:bg-indigo-700 transition-colors flex items-center"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          <MessageCircle size={16} className="mr-2" /> AI Assistant
+                        </Link>
                         <button
                           onClick={() => {
                             handleSignOut();
@@ -203,6 +223,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         className="main-content"
       >
         {children}
+        {/* Show floating chat widget only when authenticated */}
+        {authChecked && isAuth && !isAuthPage && <FloatingChatWidget />}
       </motion.main>
 
       <motion.footer

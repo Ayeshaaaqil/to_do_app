@@ -5,7 +5,7 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'packages'))
 
 # Now run the main application
-from main import app
+from .main import app
 
 if __name__ == "__main__":
     import uvicorn

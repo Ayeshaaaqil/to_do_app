@@ -1,62 +1,92 @@
-from sqlmodel import Session, select
-from models.todo import Todo, TodoCreate, TodoUpdate, TodoPatch
-from models.user import User
+"""
+Todo Service Layer
+
+This module provides business logic for todo operations,
+separating concerns from the API layer and MCP tools.
+"""
 from typing import List, Optional
-import uuid
+from sqlmodel import Session, select
+from uuid import UUID
+from ..models.todo import Todo, TodoCreate, TodoUpdate, TodoPatch
+from ..models.user import User
 
-def create_todo(session: Session, todo: TodoCreate, user_id: uuid.UUID) -> Todo:
-    db_todo = Todo(
-        title=todo.title,
-        description=todo.description,
-        is_completed=todo.is_completed,
-        user_id=user_id
-    )
-    session.add(db_todo)
-    session.commit()
-    session.refresh(db_todo)
-    return db_todo
 
-def get_todos(session: Session, user_id: uuid.UUID) -> List[Todo]:
-    statement = select(Todo).where(Todo.user_id == user_id)
-    return session.exec(statement).all()
-
-def get_todo(session: Session, todo_id: uuid.UUID, user_id: uuid.UUID) -> Optional[Todo]:
-    statement = select(Todo).where(Todo.id == todo_id, Todo.user_id == user_id)
-    return session.exec(statement).first()
-
-def update_todo(session: Session, todo_id: uuid.UUID, todo_update: TodoUpdate, user_id: uuid.UUID) -> Optional[Todo]:
-    db_todo = get_todo(session, todo_id, user_id)
-    if not db_todo:
-        return None
-
-    # Update the todo with provided values
-    for field, value in todo_update.dict(exclude_unset=True).items():
-        setattr(db_todo, field, value)
-
-    session.add(db_todo)
-    session.commit()
-    session.refresh(db_todo)
-    return db_todo
-
-def patch_todo(session: Session, todo_id: uuid.UUID, todo_patch: TodoPatch, user_id: uuid.UUID) -> Optional[Todo]:
-    db_todo = get_todo(session, todo_id, user_id)
-    if not db_todo:
-        return None
-
-    # Update the todo with provided values
-    for field, value in todo_patch.dict(exclude_unset=True).items():
-        setattr(db_todo, field, value)
-
-    session.add(db_todo)
-    session.commit()
-    session.refresh(db_todo)
-    return db_todo
-
-def delete_todo(session: Session, todo_id: uuid.UUID, user_id: uuid.UUID) -> bool:
-    db_todo = get_todo(session, todo_id, user_id)
-    if not db_todo:
-        return False
-
-    session.delete(db_todo)
-    session.commit()
-    return True
+class TodoService:
+    """Service layer for todo operations"""
+    
+    @staticmethod
+    def create_todo(session: Session, todo: TodoCreate, user_id: UUID) -> Todo:
+        """Create a new todo for a user"""
+        db_todo = Todo.from_orm(todo)
+        db_todo.user_id = user_id
+        session.add(db_todo)
+        session.commit()
+        session.refresh(db_todo)
+        return db_todo
+    
+    @staticmethod
+    def get_todo_by_id(session: Session, todo_id: UUID) -> Optional[Todo]:
+        """Get a todo by its ID"""
+        return session.get(Todo, todo_id)
+    
+    @staticmethod
+    def get_todos_by_user(session: Session, user_id: UUID) -> List[Todo]:
+        """Get all todos for a specific user"""
+        statement = select(Todo).where(Todo.user_id == user_id)
+        return session.exec(statement).all()
+    
+    @staticmethod
+    def update_todo(session: Session, todo_id: UUID, todo_update: TodoUpdate) -> Optional[Todo]:
+        """Update a todo with the provided values"""
+        db_todo = session.get(Todo, todo_id)
+        if not db_todo:
+            return None
+        
+        todo_data = todo_update.dict(exclude_unset=True)
+        for key, value in todo_data.items():
+            setattr(db_todo, key, value)
+        
+        session.add(db_todo)
+        session.commit()
+        session.refresh(db_todo)
+        return db_todo
+    
+    @staticmethod
+    def patch_todo(session: Session, todo_id: UUID, todo_patch: TodoPatch) -> Optional[Todo]:
+        """Partially update a todo with the provided values"""
+        db_todo = session.get(Todo, todo_id)
+        if not db_todo:
+            return None
+        
+        todo_data = todo_patch.dict(exclude_unset=True)
+        for key, value in todo_data.items():
+            setattr(db_todo, key, value)
+        
+        session.add(db_todo)
+        session.commit()
+        session.refresh(db_todo)
+        return db_todo
+    
+    @staticmethod
+    def delete_todo(session: Session, todo_id: UUID) -> bool:
+        """Delete a todo by its ID"""
+        db_todo = session.get(Todo, todo_id)
+        if not db_todo:
+            return False
+        
+        session.delete(db_todo)
+        session.commit()
+        return True
+    
+    @staticmethod
+    def toggle_todo_completion(session: Session, todo_id: UUID, completed: bool) -> Optional[Todo]:
+        """Toggle the completion status of a todo"""
+        db_todo = session.get(Todo, todo_id)
+        if not db_todo:
+            return None
+        
+        db_todo.is_completed = completed
+        session.add(db_todo)
+        session.commit()
+        session.refresh(db_todo)
+        return db_todo

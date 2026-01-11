@@ -1,0 +1,175 @@
+# Chat API Contract
+
+## Overview
+This document defines the API contract for the conversational AI chat endpoint that allows users to manage todos using natural language.
+
+## Endpoints
+
+### POST /api/chat
+
+#### Description
+Processes a user's natural language message and returns an AI-generated response for todo management.
+
+#### Authentication
+JWT token required in Authorization header (Bearer token)
+
+#### Request
+
+**Path**: `/api/chat`
+
+**Method**: `POST`
+
+**Headers**:
+```
+Authorization: Bearer {jwt_token}
+Content-Type: application/json
+```
+
+**Body**:
+```json
+{
+  "message": "Add 'buy groceries' to my todos",
+  "conversation_id": 123
+}
+```
+
+**Body Parameters**:
+- `message` (string, required): The user's natural language input
+- `conversation_id` (integer, optional): ID of an existing conversation to continue; if not provided, a new conversation will be created
+
+#### Response
+
+**Success Response (200 OK)**:
+```json
+{
+  "response": "I've added 'buy groceries' to your todos.",
+  "conversation_id": 123,
+  "message_id": 456
+}
+```
+
+**Response Parameters**:
+- `response` (string): The AI-generated response to the user's message
+- `conversation_id` (integer): The ID of the conversation (either provided or newly created)
+- `message_id` (integer): The ID of the newly created message in the conversation
+
+**Error Responses**:
+
+400 Bad Request - Invalid request format:
+```json
+{
+  "error": "Invalid request format",
+  "details": "Message field is required"
+}
+```
+
+401 Unauthorized - Invalid or missing authentication:
+```json
+{
+  "error": "Unauthorized",
+  "details": "Invalid or expired token"
+}
+```
+
+422 Unprocessable Entity - Natural language could not be processed:
+```json
+{
+  "error": "Unable to process request",
+  "details": "Could not understand the intent of your message"
+}
+```
+
+500 Internal Server Error - System error:
+```json
+{
+  "error": "Internal server error",
+  "details": "An unexpected error occurred"
+}
+```
+
+#### Example Requests
+
+**Request to create a new todo:**
+```
+POST /api/chat
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Content-Type: application/json
+
+{
+  "message": "Create a new todo: walk the dog tomorrow morning",
+  "conversation_id": null
+}
+```
+
+**Response:**
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "response": "I've created a new todo: 'walk the dog tomorrow morning'.",
+  "conversation_id": 123,
+  "message_id": 456
+}
+```
+
+**Request to view todos:**
+```
+POST /api/chat
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Content-Type: application/json
+
+{
+  "message": "What are my todos?",
+  "conversation_id": 123
+}
+```
+
+**Response:**
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "response": "Here are your todos:\n1. buy groceries (incomplete)\n2. walk the dog tomorrow morning (incomplete)",
+  "conversation_id": 123,
+  "message_id": 457
+}
+```
+
+## Data Models
+
+### Todo
+```json
+{
+  "id": 123,
+  "title": "buy groceries",
+  "description": "pick up milk, bread, and eggs",
+  "completed": false,
+  "created_at": "2023-10-01T10:00:00Z",
+  "updated_at": "2023-10-01T10:00:00Z"
+}
+```
+
+### Conversation
+```json
+{
+  "id": 123,
+  "user_id": 456,
+  "title": "General Todo Management",
+  "created_at": "2023-10-01T09:00:00Z",
+  "updated_at": "2023-10-01T10:00:00Z"
+}
+```
+
+### ConversationMessage
+```json
+{
+  "id": 789,
+  "conversation_id": 123,
+  "role": "user",
+  "content": "Add 'buy groceries' to my todos",
+  "timestamp": "2023-10-01T10:00:00Z",
+  "metadata": {}
+}
+```

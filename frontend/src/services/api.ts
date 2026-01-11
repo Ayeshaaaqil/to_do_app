@@ -2,7 +2,7 @@
 
 import { getAuthToken } from './auth';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://to-do-app-4fak.vercel.app/';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
 // Generic API request function
 const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
@@ -51,7 +51,7 @@ const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
 export const authAPI = {
   signup: async (email: string, password: string, name?: string) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ export const authAPI = {
 
   signin: async (email: string, password: string) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/signin`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/signin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,7 +98,7 @@ export const authAPI = {
   },
 
   signout: async () => {
-    const response = await fetch(`${API_BASE_URL}/auth/signout`, {
+    const response = await fetch(`${API_BASE_URL}/api/auth/signout`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -116,33 +116,61 @@ export const authAPI = {
 // Todo API functions
 export const todoAPI = {
   getTodos: async () => {
-    return apiRequest('/todos');
+    return apiRequest('/api/todos');
   },
 
   createTodo: async (title: string, description?: string) => {
-    return apiRequest('/todos', {
+    return apiRequest('/api/todos', {
       method: 'POST',
-      body: JSON.stringify({ title, description }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title: title,
+        description: description || ""  // Ensure description is not undefined
+      }),
     });
   },
 
   updateTodo: async (id: string, updates: { title?: string; description?: string }) => {
-    return apiRequest(`/todos/${id}`, {
+    return apiRequest(`/api/todos/${id}`, {
       method: 'PUT',
-      body: JSON.stringify(updates),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title: updates.title,
+        description: updates.description || ""
+      }),
     });
   },
 
   toggleTodoComplete: async (id: string, isCompleted: boolean) => {
-    return apiRequest(`/todos/${id}/complete`, {
+    return apiRequest(`/api/todos/${id}/complete`, {
       method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ is_completed: isCompleted }),
     });
   },
 
   deleteTodo: async (id: string) => {
-    return apiRequest(`/todos/${id}`, {
+    return apiRequest(`/api/todos/${id}`, {
       method: 'DELETE',
+    });
+  },
+};
+
+// Chat API functions
+export const chatAPI = {
+  sendMessage: async (message: string, conversationId?: string) => {
+    return apiRequest('/api/chat', {
+      method: 'POST',
+      body: JSON.stringify({
+        message,
+        conversation_id: conversationId || null
+      }),
     });
   },
 };
