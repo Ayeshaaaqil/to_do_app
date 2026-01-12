@@ -156,3 +156,5 @@ debug/
 
 # Local configuration files
 *.local
+.vercel
+.env*.local

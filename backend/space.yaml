@@ -1,0 +1,4 @@
+runtime: python3.10
+model: null
+sdk: docker
+emoji: 🤖
